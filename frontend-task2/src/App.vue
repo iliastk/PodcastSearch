@@ -4,55 +4,76 @@
   <div class="container">
     <div class="row mt-5">
       <div class="col">
-
         <div class="form-group">
           <div class="query-input">
             <label for="query">Query</label>
-            
             <span class="soft">(Please enter a term to search)</span>
-            <input type="text"
+            <input
+              type="text"
               id="query"
               class="form-control"
               v-model="request.query"
             >
           </div>
 
-          <div class="date-inputs"> 
-            <label class="standard-label" for="before">From</label>
-              <datetime
-                type="datetime"
-                v-model="request.before"
-                input-class="my-class"
-                value-zone="Australia/Sydney"
-                :phrases="{ok: 'Continue', cancel: 'Exit'}"
-                :min-datetime="minDatetime"
-                :max-datetime="maxDatetime"
-              ></datetime>
-              
-            <label class="standard-label" for="after">To</label>
-              <datetime
-                type="datetime"
-                v-model="request.after"
-                input-class="my-class"
-                value-zone="Australia/Sydney"
-                :phrases="{ok: 'Continue', cancel: 'Exit'}"
-                :min-datetime="minDatetime"
-                :max-datetime="maxDatetime"
-              ></datetime>
+          <div class="date-inputs">
+            <label
+              class="standard-label"
+              for="before"
+            >
+              From
+            </label>
+            <datetime
+              type="datetime"
+              v-model="request.before"
+              input-class="my-class"
+              value-zone="Australia/Sydney"
+              :phrases="{ok: 'Continue', cancel: 'Exit'}"
+              :min-datetime="minDatetime"
+              :max-datetime="maxDatetime"
+            />
 
-            <label class="standard-label" for="interval">Interval</label>
-              <select id= "interval"
-                class= "form-control"
-                v-model= "selectedInterval">
-                <option v-for= "interval in intervals"> {{ interval }} </option>
-              </select> 
+            <label
+              class="standard-label"
+              for="after"
+            >
+              To
+            </label>
+            <datetime
+              type="datetime"
+              v-model="request.after"
+              input-class="my-class"
+              value-zone="Australia/Sydney"
+              :phrases="{ok: 'Continue', cancel: 'Exit'}"
+              :min-datetime="minDatetime"
+              :max-datetime="maxDatetime"
+            />
+
+            <label
+              class="standard-label"
+              for="interval"
+            >
+              Interval
+            </label>
+            <select
+              id="interval"
+              class="form-control"
+              v-model="selectedInterval"
+            >
+              <option
+                v-for="interval in intervals"
+                :key="interval"
+              >
+                {{ interval }}
+              </option>
+            </select>
           </div>
           <div class="buttons">
             <button
               class="btn btn-primary"
               :disabled="noFormData"
               @click="searchData"
-            > 
+            >
               Search
             </button>
           </div>
@@ -60,10 +81,10 @@
             v-if="noFormData"
             class="error-message"
           >
-          Please make sure all form elements are filled in
-          </span> 
+            Please make sure all form elements are filled in
+          </span>
         </div>
-      </div>    
+      </div>
     </div>
     <div
       v-if="dataSets.length"
@@ -82,35 +103,31 @@
 </template>
 
 <script>
+import 'vue-datetime/dist/vue-datetime.css';
+
 import axios from 'axios';
-import moment from "moment";
-// import BarChart from "./components/BarChart";
+import moment from 'moment';
 
-import Header from './components/layouts/Header'
+import Header from './components/layouts/Header';
 import StackedChart from './components/StackedChart';
-import 'vue-datetime/dist/vue-datetime.css'
-import { Datetime } from 'vue-datetime'
-
 
 export default {
   components: {
-    // BarChart,
     StackedChart,
-    Header
+    Header,
   },
   data() {
     return {
       request: {
         query: '',
         before: '',
-        after: ''
+        after: '',
       },
       selectedInterval: '1d',
       intervals: ['1m', '1h', '1d', '1w'],
       minDatetime: '2019-08-01T00:00:00+10',
       maxDatetime: '2019-08-31T23:59:59+10',
       datetime: '',
-    
       dataSets: [],
       chartOptions: {
         responsive: true,
@@ -129,26 +146,25 @@ export default {
         },
       },
     };
-    
   },
   computed: {
     noFormData() {
-      return (!this.request.query || !this.request.before || !this.request.after);  
+      return (!this.request.query || !this.request.before || !this.request.after);
     },
   },
   methods: {
     async searchData() {
-      this.dataSets=[];
-      var paramsValues = Object.values(this.request);
+      this.dataSets = [];
+      const paramsValues = Object.values(this.request);
 
       const params = {
         query: paramsValues[0],
-        before: moment(paramsValues[1]).format("x"), //before: 1564617600000,
-        after: moment(paramsValues[2]).format("x"),  //after:  1567295999000,
-        interval: this.selectedInterval
-      }
-      const elasticsearchData = (await axios.get('http://localhost:3000/results', { params } )).data;
+        before: moment(paramsValues[1]).format('x'), // before: 1564617600000,
+        after: moment(paramsValues[2]).format('x'), // after: 1567295999000,
+        interval: this.selectedInterval,
+      };
 
+      const elasticsearchData = (await axios.get('http://localhost:3000/results', { params })).data;
 
       const arrOnline = [];
       const arrTV = [];
@@ -156,46 +172,51 @@ export default {
       const arrSocial = [];
       const arrPrint = [];
       const arrMagazine = [];
-      
-      this.arrayDates =[];
-      var keys = Object.keys(elasticsearchData);
-      var index= 0;
-      keys.forEach(key=>{
-        const date= key;
-        this.arrayDates[index] = moment(key).format("DD/MM");
 
-        var array = Object.values(elasticsearchData)
-        var inside_array= array[index];
-        index++;
-        var i;
-        for(i=0; i< inside_array.length; i++){
-          switch(inside_array[i].key){
-            case "Online":
-              arrOnline.push({date: date, label: inside_array[i].key, count: inside_array[i].doc_count});
+      this.arrayDates = [];
+      const keys = Object.keys(elasticsearchData);
+      let index = 0;
+
+      keys.forEach((key) => {
+        const date = key;
+        this.arrayDates[index] = moment(key).format('DD/MM');
+
+        const array = Object.values(elasticsearchData);
+        const insideArray = array[index];
+        index += 1;
+        let i;
+
+        for (i = 0; i < insideArray.length; i += 1) {
+          switch (insideArray[i].key) {
+            case 'Online':
+              arrOnline.push({ date, label: insideArray[i].key, count: insideArray[i].doc_count });
               break;
-            case "TV":
-              arrTV.push({date: date, label: inside_array[i].key, count: inside_array[i].doc_count});
+            case 'TV':
+              arrTV.push({ date, label: insideArray[i].key, count: insideArray[i].doc_count });
               break;
-            case "Radio":
-              arrRadio.push({date: date, label: inside_array[i].key, count: inside_array[i].doc_count});
+            case 'Radio':
+              arrRadio.push({ date, label: insideArray[i].key, count: insideArray[i].doc_count });
               break;
-            case "Social":
-              arrSocial.push({date: date, label: inside_array[i].key, count: inside_array[i].doc_count});
+            case 'Social':
+              arrSocial.push({ date, label: insideArray[i].key, count: insideArray[i].doc_count });
               break;
-            case "Print":
-              arrPrint.push({date: date, label: inside_array[i].key, count: inside_array[i].doc_count});
+            case 'Print':
+              arrPrint.push({ date, label: insideArray[i].key, count: insideArray[i].doc_count });
               break;
-            case "Magazine":
-              arrMagazine.push({date: date, label: inside_array[i].key, count: inside_array[i].doc_count});
+            case 'Magazine':
+              arrMagazine.push({
+                date,
+                label: insideArray[i].key,
+                count: insideArray[i].doc_count,
+              });
               break;
             default:
-              console.log("Err of type of medium")
+              // console.log('Err of type of medium');
           }
         }
       });
-      
-      
-      this.dataSets =  [
+
+      this.dataSets = [
         {
           label: 'Online',
           borderColor: '#4E5E66',
@@ -211,7 +232,6 @@ export default {
           pointBackgroundColor: '#858EAB',
           backgroundColor: '#858EAB',
           data: arrRadio.map(d => d.count),
-          
         },
         {
           label: 'TV',
@@ -246,8 +266,8 @@ export default {
           data: arrMagazine.map(d => d.count),
         },
       ];
-    }
-  }
+    },
+  },
 };
 </script>
 

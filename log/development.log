@@ -1,0 +1,85 @@
+Started GET "/results?query=Scott+morrisson&before=1565272740000&after=1566568740000&interval=1d" for ::1 at 2022-04-23 11:45:31 +0200
+  [1m[35m (1.9ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by ResultsController#index as HTML
+  Parameters: {"query"=>"Scott morrisson", "before"=>"1565272740000", "after"=>"1566568740000", "interval"=>"1d"}
+Completed 500 Internal Server Error in 1914ms (ActiveRecord: 0.0ms | Allocations: 6046)
+
+
+  
+Elastic::Transport::Transport::Errors::Unauthorized ([401] {"error":{"root_cause":[{"type":"security_exception","reason":"unable to authenticate user [elastic] for REST request [/news_201908/_search]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","ApiKey"]}}],"type":"security_exception","reason":"unable to authenticate user [elastic] for REST request [/news_201908/_search]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","ApiKey"]}},"status":401}):
+  
+app/controllers/results_controller.rb:40:in `create_a_request'
+app/controllers/results_controller.rb:30:in `call_elastic_search'
+app/controllers/results_controller.rb:12:in `index'
+Started GET "/results?query=Scott+morrisson&before=1565272740000&after=1566568740000&interval=1d" for ::1 at 2022-04-23 11:45:35 +0200
+Processing by ResultsController#index as HTML
+  Parameters: {"query"=>"Scott morrisson", "before"=>"1565272740000", "after"=>"1566568740000", "interval"=>"1d"}
+Completed 500 Internal Server Error in 1903ms (ActiveRecord: 0.0ms | Allocations: 3746)
+
+
+  
+Elastic::Transport::Transport::Errors::Unauthorized ([401] {"error":{"root_cause":[{"type":"security_exception","reason":"unable to authenticate user [elastic] for REST request [/news_201908/_search]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","ApiKey"]}}],"type":"security_exception","reason":"unable to authenticate user [elastic] for REST request [/news_201908/_search]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","ApiKey"]}},"status":401}):
+  
+app/controllers/results_controller.rb:40:in `create_a_request'
+app/controllers/results_controller.rb:30:in `call_elastic_search'
+app/controllers/results_controller.rb:12:in `index'
+Started GET "/results?query=Scott+morrisson&before=1565272740000&after=1566568740000&interval=1d" for ::1 at 2022-04-23 11:45:37 +0200
+Processing by ResultsController#index as HTML
+  Parameters: {"query"=>"Scott morrisson", "before"=>"1565272740000", "after"=>"1566568740000", "interval"=>"1d"}
+Completed 500 Internal Server Error in 1761ms (ActiveRecord: 0.0ms | Allocations: 3751)
+
+
+  
+Elastic::Transport::Transport::Errors::Unauthorized ([401] {"error":{"root_cause":[{"type":"security_exception","reason":"unable to authenticate user [elastic] for REST request [/news_201908/_search]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","ApiKey"]}}],"type":"security_exception","reason":"unable to authenticate user [elastic] for REST request [/news_201908/_search]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","ApiKey"]}},"status":401}):
+  
+app/controllers/results_controller.rb:40:in `create_a_request'
+app/controllers/results_controller.rb:30:in `call_elastic_search'
+app/controllers/results_controller.rb:12:in `index'
+Started GET "/results?query=Scott+morrisson&before=1565272740000&after=1566568740000&interval=1d" for ::1 at 2022-04-23 11:45:44 +0200
+Processing by ResultsController#index as HTML
+  Parameters: {"query"=>"Scott morrisson", "before"=>"1565272740000", "after"=>"1566568740000", "interval"=>"1d"}
+Completed 500 Internal Server Error in 1879ms (ActiveRecord: 0.0ms | Allocations: 3734)
+
+
+  
+Elastic::Transport::Transport::Errors::Unauthorized ([401] {"error":{"root_cause":[{"type":"security_exception","reason":"unable to authenticate user [elastic] for REST request [/news_201908/_search]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","ApiKey"]}}],"type":"security_exception","reason":"unable to authenticate user [elastic] for REST request [/news_201908/_search]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","ApiKey"]}},"status":401}):
+  
+app/controllers/results_controller.rb:40:in `create_a_request'
+app/controllers/results_controller.rb:30:in `call_elastic_search'
+app/controllers/results_controller.rb:12:in `index'
+Started GET "/results?query=Scott+morrisson&before=1565272740000&after=1566568740000&interval=1d" for ::1 at 2022-04-23 11:45:46 +0200
+Processing by ResultsController#index as HTML
+  Parameters: {"query"=>"Scott morrisson", "before"=>"1565272740000", "after"=>"1566568740000", "interval"=>"1d"}
+Completed 500 Internal Server Error in 1828ms (ActiveRecord: 0.0ms | Allocations: 3752)
+
+
+  
+Elastic::Transport::Transport::Errors::Unauthorized ([401] {"error":{"root_cause":[{"type":"security_exception","reason":"unable to authenticate user [elastic] for REST request [/news_201908/_search]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","ApiKey"]}}],"type":"security_exception","reason":"unable to authenticate user [elastic] for REST request [/news_201908/_search]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","ApiKey"]}},"status":401}):
+  
+app/controllers/results_controller.rb:40:in `create_a_request'
+app/controllers/results_controller.rb:30:in `call_elastic_search'
+app/controllers/results_controller.rb:12:in `index'
+Started GET "/results?query=Scott+morrisson&before=1565272740000&after=1566568740000&interval=1d" for ::1 at 2022-04-23 11:45:48 +0200
+Processing by ResultsController#index as HTML
+  Parameters: {"query"=>"Scott morrisson", "before"=>"1565272740000", "after"=>"1566568740000", "interval"=>"1d"}
+Completed 500 Internal Server Error in 4001ms (ActiveRecord: 0.0ms | Allocations: 3753)
+
+
+  
+Elastic::Transport::Transport::Errors::Unauthorized ([401] {"error":{"root_cause":[{"type":"security_exception","reason":"unable to authenticate user [elastic] for REST request [/news_201908/_search]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","ApiKey"]}}],"type":"security_exception","reason":"unable to authenticate user [elastic] for REST request [/news_201908/_search]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","ApiKey"]}},"status":401}):
+  
+app/controllers/results_controller.rb:40:in `create_a_request'
+app/controllers/results_controller.rb:30:in `call_elastic_search'
+app/controllers/results_controller.rb:12:in `index'
+Started GET "/results?query=Scott+morrisson&before=1565272740000&after=1566568740000&interval=1d" for ::1 at 2022-04-23 11:45:57 +0200
+Processing by ResultsController#index as HTML
+  Parameters: {"query"=>"Scott morrisson", "before"=>"1565272740000", "after"=>"1566568740000", "interval"=>"1d"}
+Completed 500 Internal Server Error in 1921ms (ActiveRecord: 0.0ms | Allocations: 3727)
+
+
+  
+Elastic::Transport::Transport::Errors::Unauthorized ([401] {"error":{"root_cause":[{"type":"security_exception","reason":"unable to authenticate user [elastic] for REST request [/news_201908/_search]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","ApiKey"]}}],"type":"security_exception","reason":"unable to authenticate user [elastic] for REST request [/news_201908/_search]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","ApiKey"]}},"status":401}):
+  
+app/controllers/results_controller.rb:40:in `create_a_request'
+app/controllers/results_controller.rb:30:in `call_elastic_search'
+app/controllers/results_controller.rb:12:in `index'

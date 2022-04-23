@@ -1,10 +1,10 @@
 // import router from './router';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'vue-datetime/dist/vue-datetime.css';
+import { Datetime } from 'vue-datetime';
 import TurbolinksAdapter from 'vue-turbolinks';
 import Vue from 'vue';
-import App from './App.vue';
-import 'vue-datetime/dist/vue-datetime.css'
-import { Datetime } from 'vue-datetime'
+import App from './App';
 
 Vue.use(TurbolinksAdapter);
 Vue.use(Datetime);
@@ -20,5 +20,5 @@ document.addEventListener('turbolinks:load', () => {
 
 
 new Vue({
-  render: (h) => h(App),
+  render: h => h(App),
 }).$mount('#app');

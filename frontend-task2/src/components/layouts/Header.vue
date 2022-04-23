@@ -1,13 +1,13 @@
 <template>
     <header class= "header">
-        <h1 class= "h1">Streem</h1>
+        <h1 class= "h1">Podcast Search Engine</h1>
     </header>
 </template>
 
 <script>
 export default {
-    name: "Header"
-}
+  name: 'Header',
+};
 </script>
 
 <style scoped>

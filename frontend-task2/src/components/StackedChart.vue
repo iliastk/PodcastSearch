@@ -5,7 +5,7 @@ export default {
   extends: Bar,
   props: {
     label: {
-      type: Array
+      type: Array,
     },
     data: {
       type: Array,
@@ -16,7 +16,6 @@ export default {
       required: true,
     },
   },
-  
   mounted() {
     this.renderChart({
       labels: this.label,
