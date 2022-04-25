@@ -8,74 +8,38 @@
           <div class="query-input">
             <label for="query">Query</label>
             <span class="soft">(Please enter a term to search)</span>
-            <input
+            <Input
               type="text"
               id="query"
               class="form-control"
               v-model="request.query"
-            >
-          </div>
-
-          <div class="date-inputs">
-            <label
-              class="standard-label"
-              for="before"
-            >
-              From
-            </label>
-            <datetime
-              type="datetime"
-              v-model="request.before"
-              input-class="my-class"
-              value-zone="Australia/Sydney"
-              :phrases="{ok: 'Continue', cancel: 'Exit'}"
-              :min-datetime="minDatetime"
-              :max-datetime="maxDatetime"
             />
 
-            <label
-              class="standard-label"
-              for="after"
-            >
-              To
-            </label>
-            <datetime
-              type="datetime"
-              v-model="request.after"
-              input-class="my-class"
-              value-zone="Australia/Sydney"
-              :phrases="{ok: 'Continue', cancel: 'Exit'}"
-              :min-datetime="minDatetime"
-              :max-datetime="maxDatetime"
-            />
-
-            <label
-              class="standard-label"
-              for="interval"
-            >
-              Interval
-            </label>
-            <select
-              id="interval"
-              class="form-control"
-              v-model="selectedInterval"
-            >
-              <option
-                v-for="interval in intervals"
-                :key="interval"
+            <div class="interval">
+              <label for="interval">Duration</label>
+              <Select
+                id="interval"
+                class="form-control"
+                v-model="selectedInterval"
               >
-                {{ interval }}
-              </option>
-            </select>
+                <Option
+                  v-for="interval in intervals"
+                  :key="interval"
+                >
+                  {{ interval }}
+                </Option>
+              </Select>
+            </div>
           </div>
+
           <div class="buttons">
-            <button
+            <Button
               class="btn btn-primary"
               :disabled="noFormData"
               @click="searchData"
             >
               Search
-            </button>
+            </Button>
           </div>
           <span
             v-if="noFormData"
@@ -91,7 +55,7 @@
       class="row mt-5"
       >
       <div class="col">
-        <stacked-chart
+        <StackedChart
           :label="arrayDates"
           :data="dataSets"
           :options="chartOptions"
@@ -123,10 +87,10 @@ export default {
         before: '',
         after: '',
       },
-      selectedInterval: '1d',
-      intervals: ['1m', '1h', '1d', '1w'],
-      minDatetime: '2019-08-01T00:00:00+10',
-      maxDatetime: '2019-08-31T23:59:59+10',
+      selectedInterval: '1 minute',
+      intervals: ['10 seconds', '30 seconds', '1 minute', '2 minutes', '3 minutes', '4 minutes'],
+      // minDatetime: '2019-08-01T00:00:00+10',
+      // maxDatetime: '2019-08-31T23:59:59+10',
       datetime: '',
       dataSets: [],
       chartOptions: {
@@ -149,7 +113,7 @@ export default {
   },
   computed: {
     noFormData() {
-      return (!this.request.query || !this.request.before || !this.request.after);
+      return !this.request.query;
     },
   },
   methods: {
@@ -159,12 +123,14 @@ export default {
 
       const params = {
         query: paramsValues[0],
-        before: moment(paramsValues[1]).format('x'), // before: 1564617600000,
-        after: moment(paramsValues[2]).format('x'), // after: 1567295999000,
+        // before: moment(paramsValues[1]).format('x'), // before: 1564617600000,
+        // after: moment(paramsValues[2]).format('x'), // after: 1567295999000,
         interval: this.selectedInterval,
       };
 
       const elasticsearchData = (await axios.get('http://localhost:3000/results', { params })).data;
+
+      const keys = Object.keys(elasticsearchData);
 
       const arrOnline = [];
       const arrTV = [];
@@ -172,9 +138,7 @@ export default {
       const arrSocial = [];
       const arrPrint = [];
       const arrMagazine = [];
-
       this.arrayDates = [];
-      const keys = Object.keys(elasticsearchData);
       let index = 0;
 
       keys.forEach((key) => {
@@ -286,6 +250,9 @@ export default {
   .buttons {
     display: flex;
     justify-content: center;
+  }
+  .interval {
+    margin-top: 10px;
   }
   .error-message {
     color: red;

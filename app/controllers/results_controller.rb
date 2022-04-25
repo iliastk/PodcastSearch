@@ -5,19 +5,15 @@ class ResultsController < ApplicationController
   require 'faraday'
   require 'elasticsearch/api'
   require 'active_support'
-  
 
   def index
-      #puts params
-      elasticsearch_data = call_elastic_search(params)
-      parsed_data = parse_elasticsearch_data(elasticsearch_data)
+    #puts params
+    elasticsearch_data = call_elastic_search(params)
+    parsed_data = parse_elasticsearch_data(elasticsearch_data)
 
-      render :json => parsed_data, :status => 200
-      
+    render :json => parsed_data, :status => 200
   end
 end
-
-
 
 #PERFECT
 #This is the method call elasticSearch and return the JSON Response.
@@ -37,8 +33,7 @@ end
 
 #PERFECT
 def create_a_request(streemClient, params)
-  return  streemClient.search(index: 'news_201908', body: create_query(params))
-  
+  return streemClient.search(index: 'news_201908', body: create_query(params))
 end
 
 #PERFECT
