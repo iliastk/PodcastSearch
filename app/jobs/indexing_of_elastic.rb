@@ -12,11 +12,11 @@ class IndexingOfElastic
     es = Elasticsearch::Client.new url: 'http://localhost:9200', log: true
     return if !check_connection(es)
 
-    create_metadata_index(es) if false
-    indexing_metadata_content(es) if false
+    create_metadata_index(es) if true
+    indexing_metadata_content(es) if true
 
-    create_podcasts_index(es) if false
-    indexing_podcasts_content(es) if false
+    create_podcasts_index(es) if true
+    indexing_podcasts_content(es) if true
   end
 
   private
