@@ -14,7 +14,7 @@
               id="query"
               class="form-control"
             />
-
+           
             <div class="interval">
               <label for="interval">Duration</label>
               <select
@@ -28,7 +28,23 @@
                 >
                   {{ interval }}
                 </Option>
-              </Select>
+              </select>
+            </div>
+
+            <div class="interval">
+              <label for="serch-type">Search Type</label>
+              <select
+                v-model="selectedSearchType"
+                id="serch-type"
+                class="form-control"
+              >
+                <Option
+                  v-for="type in searchTypes"
+                  :key="type"
+                >
+                  {{ type }}
+                </Option>
+              </select>
             </div>
           </div>
 
@@ -81,7 +97,9 @@ export default {
     return {
       selectedQuery: '',
       selectedInterval: '30 seconds',
+      selectedSearchType: 'Match phrase',
       intervals: ['30 seconds', '1 minute', '2 minutes', '3 minutes', '4 minutes'],
+      searchTypes: ['Match phrase', 'Must contain words', 'Fuzzy Search'],
       matches: [],
     };
   },
@@ -115,13 +133,33 @@ export default {
 
       return durationValue;
     },
+    translateSearchType() {
+      let searchValue = '';
 
+      switch (this.selectedSearchType) {
+        case 'Match phrase':
+          searchValue = 'match_phrase';
+          break;
+        case 'Must contain words':
+          searchValue = 'must_contain';
+          break;
+        case 'Fuzzy Search':
+          searchValue = 'fuzzy_search';
+          break;
+        default:
+          searchValue = 'match_phrase';
+          break;
+      }
+
+      return searchValue;
+    },
   },
   methods: {
     async searchData() {
       const params = {
         query: this.selectedQuery,
         duration: this.translateDuration,
+        search: this.translateSearchType,
       };
 
       const elasticsearchData = (await axios.get('http://localhost:3000/results', { params })).data;

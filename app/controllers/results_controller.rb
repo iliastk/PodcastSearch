@@ -6,14 +6,20 @@ class ResultsController < ApplicationController
   require 'elasticsearch/api'
   require 'active_support'
 
-  def index
-    # params[:query]
+  # params[:query]
     # params[:duration] = [
     #   0: 30sec,
     #   1: 1min,
     #   2: 1min30sec,
     #   3: 2min,
     # ]
+    # params[:search] = [
+    #   match_phrase,
+    #   must_contain,
+    #   fuzzy_search,
+    # ]
+
+  def index
     elasticsearch_data = call_elastic_search(params)
     parsed_data = parse_elasticsearch_data(elasticsearch_data, params)
 
@@ -31,10 +37,16 @@ def call_elastic_search(params)
 end
 
 def create_a_request(streemClient, params)
-  return streemClient.search(index: 'podcasts', body: create_query(params))
+  if params[:search] == 'match_phrase'
+    return streemClient.search(index: 'podcasts_test', body: create_query_match_phrase(params))
+  elsif params[:search] == 'must_contain'
+    return streemClient.search(index: 'podcasts_test', body: create_query_must_contain(params))
+  elsif params[:search] == 'fuzzy_search'
+    return streemClient.search(index: 'podcasts_test', body: create_query_fuzzy(params))
+  end
 end
 
-def create_query(params)
+def create_query_match_phrase(params)
   return '{
     "query": {
       "nested": {
@@ -56,9 +68,70 @@ def create_query(params)
   }'
 end
 
+def create_query_fuzzy(params)
+  return '{
+    "query": {
+      "nested": {
+        "path": "clips",
+        "query": {
+          "bool": {
+            "should": [
+              {
+                "match": {
+                  "clips.transcript": "' + params[:query] + '"
+                }
+              }
+            ]
+          }
+        },
+        "inner_hits": {}
+      }
+    }
+  }'
+end
+
+def create_query_must_contain(params)
+  return '{
+    "query": {
+      "nested": {
+        "path": "clips",
+        "query": {
+          "bool": {
+            "must": [
+              '+ must_include_query(params[:query]) +'
+            ]
+          }
+        },
+        "inner_hits": {}
+      }
+    }
+  }'
+end
+
+#QUERY => cornavirus spread pandemic
+#OUTPUT => 
+# {"term":{"clips.transcript": "coronavirus" } }, i=0
+# {"term":{"clips.transcript": "pandemic" } }, i=1
+# {"term":{"clips.transcript": "spread" } } i=2
+
+def must_include_query(query)
+  terms = query.split(" ")
+  result = ''
+
+  terms.each_with_index do |term, index|
+    if index == (terms.length - 1)
+      result.concat('{"term":{"clips.transcript": "' + term + '" } }')
+    else
+      result.concat('{"term":{"clips.transcript": "' + term + '" } },')
+    end
+  end
+
+  result
+end
+
 def attach_meta_info(streemClient, elasticsearch_clips)
   elasticsearch_clips['hits']['hits'].each do |hit|
-    show_uri = hit['_source']['title'].split('/').second_to_last.split('_').last
+    show_uri = hit['_source']['title'].split('/').second_to_last
     episode_uri = hit['_source']['title'].split('/').last.split('.').first
 
     elastic_metadata = streemClient.search(index: 'metadata', body: create_query_meta(show_uri, episode_uri))
@@ -76,12 +149,12 @@ def create_query_meta(show_uri, episode_uri)
         "must": [
           {
             "match": {
-              "show_uri": "spotify:show:' + show_uri + '"
+              "show_filename_prefix": "' + show_uri + '"
             }
           },
           {
             "match": {
-              "episode_uri": "spotify:episode:' + episode_uri + '"
+              "episode_filename_prefix": "' + episode_uri + '"
             }
           }
         ]
@@ -143,97 +216,3 @@ end
   
 # end
 
-
-#PERFECT
-#This is the method call elasticSearch and return the JSON Response.
-#params[:query]
-#params[:before]
-#params[:after]
-#params[:interval]
-# def call_elastic_search(params)
-#   streemClient = Elasticsearch::Client.new url: 'https://elastic:streem@sample.es.streem.com.au:443', log: true
-#   elasticsearch_response = create_a_request(streemClient, params)
-
-#   return elasticsearch_response
-# end
-
-#PERFECT
-# def create_a_request(streemClient, params)
-#   return streemClient.search(index: 'news_201908', body: create_query(params))
-# end
-
-#PERFECT
-# def create_query(params)
-  # return '{
-  #   "size": 0,
-  #   "query": {
-  #     "bool": {
-  #       "must": [
-  #         {
-  #           "match_phrase": {
-  #             "text": "' + params[:query] + '"
-  #           }
-  #         },
-  #         {
-  #           "range": {
-  #             "timestamp": {
-  #               "gte": ' + params[:before] + ',
-  #               "lte": ' + params[:after] + '
-  #             }
-  #           }
-  #         }
-  #       ]
-  #     }
-  #   },
-  #   "aggs":{
-  #     "first_agg":{
-  #       "date_histogram": {
-  #         "field": "timestamp",
-  #         "calendar_interval": "' + params[:interval] + '", 
-  #         "order": {
-  #           "_key": "asc"
-  #         }
-  #       },
-  #       "aggs": {
-  #         "second_agg": {
-  #           "terms": {
-  #             "field": "medium",
-  #             "order": {
-  #               "_key": "asc"
-  #             }
-  #           }
-  #         }
-  #       }
-  #     }
-  #   }
-  # }
-  # {
-  #   "size": 0,
-  #   "query": {
-  #     "bool": {
-  #       "must": [
-  #         {
-  #           "match_phrase": {
-  #             "text": "Michael Jackson"
-  #           }
-  #         }
-  #       ]
-  #     }
-  #   }
-  # }'
-# end
-
-#PERFECT
-# Obtain group by date (key), the Category & DocCount.
-# return [
-#  { timestamp: [{TV: 48265}, {Online: 26716}, {Radio: 95794}, ...] },
-#  { timestamp: [{TV: 12239}, {Online: 49348}, {Radio: 34398}, ...] }
-#  ]
-# def  parse_elasticsearch_data(elasticsearch_data)
-#   result ={}
-#   elasticsearch_data['aggregations']['first_agg']['buckets'].each do |buckets| 
-#     new_hash = { buckets['key_as_string'] => buckets['second_agg']['buckets']}
-#     result.merge!(new_hash)    
-#   end
-#   return result   
-# end
