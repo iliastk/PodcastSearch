@@ -51,3 +51,7 @@ The JSON response is parsed to create an array of objects that are going to be u
 
 *Frontend:*
 The Podcasts Cards are created with all the info of the clips retrieved.
+
+<img width="1083" alt="Screen Shot 2022-05-06 at 8 00 03 pm" src="https://user-images.githubusercontent.com/76936275/167311519-e0fedf7a-9115-493e-80e2-b202c8775810.png">
+<img width="1179" alt="Screen Shot 2022-05-05 at 11 12 20 pm" src="https://user-images.githubusercontent.com/76936275/167311523-12126c69-2b56-48be-a9f9-c0f369e37620.png">
+
