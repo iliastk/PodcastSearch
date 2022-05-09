@@ -32,8 +32,8 @@ class IndexingOfElastic
   end
 
   def create_metadata_index(es)
-    if es.indices.exists(:index => "metadata_ruby")
-      es.indices.delete(:index => 'metadata_ruby')
+    if es.indices.exists(:index => "metadata")
+      es.indices.delete(:index => 'metadata')
       pp 'Metadata Ruby Index Deleted'
     end
 
@@ -60,8 +60,8 @@ class IndexingOfElastic
       }
     }
 
-    if !es.indices.exists(:index => "metadata_ruby")
-      es.indices.create(:index => "metadata_ruby", :body => body)
+    if !es.indices.exists(:index => "metadata")
+      es.indices.create(:index => "metadata", :body => body)
       pp 'Metadata Ruby Index Created'
     end
   end
@@ -83,13 +83,13 @@ class IndexingOfElastic
       end
 
       pp index
-      es.index(:index => "metadata_ruby", :body => body)
+      es.index(:index => "metadata", :body => body)
     end
   end
 
   def create_podcasts_index(es)
-    if es.indices.exists(:index => "podcasts_ruby")
-      es.indices.delete(:index => 'podcasts_ruby')
+    if es.indices.exists(:index => "podcasts_test")
+      es.indices.delete(:index => 'podcasts_test')
       pp 'Podcasts Ruby Index Deleted'
     end
 
@@ -128,8 +128,8 @@ class IndexingOfElastic
       }
     }
 
-    if !es.indices.exists(:index => "podcasts_ruby")
-      es.indices.create(:index => "podcasts_ruby", :body => body)
+    if !es.indices.exists(:index => "podcasts_test")
+      es.indices.create(:index => "podcasts_test", :body => body)
       pp 'Podcasts Ruby Index Created'
     end
   end
@@ -163,7 +163,7 @@ class IndexingOfElastic
       body["title"] = file_path
       body["clips"] = clips
 
-      es.index(:index => "podcasts_ruby", :body => body)
+      es.index(:index => "podcasts_test", :body => body)
     end
   end
 

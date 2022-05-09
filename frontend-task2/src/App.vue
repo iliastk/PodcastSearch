@@ -14,7 +14,6 @@
               id="query"
               class="form-control"
             />
-           
             <div class="interval">
               <label for="interval">Duration</label>
               <select
